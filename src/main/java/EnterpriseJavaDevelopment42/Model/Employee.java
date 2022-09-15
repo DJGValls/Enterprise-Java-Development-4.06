@@ -24,6 +24,10 @@ public class Employee {
     @Enumerated(value = EnumType.STRING)
     private Status status;
 
+    public Employee() {
+
+    }
+
     public int getEmployeeId() {
         return employeeId;
     }
@@ -61,6 +65,13 @@ public class Employee {
     }
 
     public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public Employee(int employeeId, String department, String name, Status status) {
+        this.employeeId = employeeId;
+        this.department = department;
+        this.name = name;
         this.status = status;
     }
 }
