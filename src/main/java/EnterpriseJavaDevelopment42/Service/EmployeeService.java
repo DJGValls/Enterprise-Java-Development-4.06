@@ -4,7 +4,6 @@ import EnterpriseJavaDevelopment42.Model.Employee;
 import EnterpriseJavaDevelopment42.Model.Status;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface EmployeeService {
 
@@ -19,6 +18,8 @@ public interface EmployeeService {
     Employee save(Employee employee); //metodo para añadir un employee, ejercicio 2 de 4.04
 
     Employee update(int employeeId, Employee employee); //metodo para updatear un employee, ejercicios 3 y 4 de 4.04
+
+
 
 
 

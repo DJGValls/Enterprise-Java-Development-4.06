@@ -1,12 +1,11 @@
 package EnterpriseJavaDevelopment42.Service;
 
-import EnterpriseJavaDevelopment42.Model.Employee;
+import EnterpriseJavaDevelopment42.Model.DTO.PatientNameDTO;
 import EnterpriseJavaDevelopment42.Model.Patient;
 import EnterpriseJavaDevelopment42.Model.Status;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 public interface PatientService {
 
@@ -22,7 +21,9 @@ public interface PatientService {
 
     Patient save(Patient patient); //metodo para añadir un patient ejercicio 1 de 4.0.4
 
-    Patient update(int patientId, Patient patient); //metodo para updatear un patient ejercicio 5 de 4.04
+    Patient updatePatientInfo(int id, PatientNameDTO name); //metodo para updatear un patient ejercicio 5 de 4.04
+
+
 
 
 

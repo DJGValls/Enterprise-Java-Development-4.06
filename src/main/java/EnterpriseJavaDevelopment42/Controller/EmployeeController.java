@@ -2,7 +2,6 @@ package EnterpriseJavaDevelopment42.Controller;
 
 
 import EnterpriseJavaDevelopment42.Model.Employee;
-import EnterpriseJavaDevelopment42.Model.Patient;
 import EnterpriseJavaDevelopment42.Model.Status;
 import EnterpriseJavaDevelopment42.Service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,5 +1,6 @@
 package EnterpriseJavaDevelopment42.Service;
 
+import EnterpriseJavaDevelopment42.Model.DTO.PatientNameDTO;
 import EnterpriseJavaDevelopment42.Model.Patient;
 import EnterpriseJavaDevelopment42.Model.Status;
 import EnterpriseJavaDevelopment42.Repository.PatientRepository;
@@ -8,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class PatientServiceImpl implements PatientService{
@@ -52,12 +52,10 @@ public class PatientServiceImpl implements PatientService{
     }
 
     @Override
-    public Patient update(int patientId, Patient patient) {
-        Patient storedPatient = get(patientId);
-        storedPatient.setName(patient.getName());
-        storedPatient.setDateOfBirth(patient.getDateOfBirth());
-        storedPatient.setAdmittedBy(patient.getAdmittedBy());
-        return patientRepository.save(patient);
+    public Patient updatePatientInfo(int id, PatientNameDTO name) {
+        Patient storedPatient = get(id);
+        storedPatient.setName(name.getName());
+        return patientRepository.save(storedPatient);
     }
 
 

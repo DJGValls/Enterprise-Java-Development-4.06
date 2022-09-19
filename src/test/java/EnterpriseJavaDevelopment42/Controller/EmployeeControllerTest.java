@@ -12,22 +12,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MockMvcBuilder;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.net.URI;
 import java.util.List;
 
 import static EnterpriseJavaDevelopment42.Model.Status.*;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-
-
 
 
 @SpringBootTest
@@ -78,17 +74,16 @@ class EmployeeControllerTest {
 
     @DisplayName("Test Employee Id")
     @Test
-    void get_() throws Exception{
+    void get_id() throws Exception{
 
         MvcResult mvcResult = mockMvc.perform(get("/doctors/doctorsId/356712"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
-        Employee employee = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), Employee.class);
 
+        Employee employee = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), Employee.class);
         assertEquals(employee.getEmployeeId(), 356712);
-        assertEquals(employee.getName(), "Alonso Flores");
-        assertEquals(employee.getStatus(), ON_CALL);
+
 
     }
     @DisplayName("Test list of status OFF")
@@ -99,24 +94,80 @@ class EmployeeControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andReturn();
-
         List<Employee> employees = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<List<Employee>>() {});
         assertEquals(2, employees.size());
     }
 
+    @DisplayName("Test List by departments")
     @Test
-    void getDepartment() {
+    void getDepartment() throws Exception{
+
+        MvcResult mvcResult = mockMvc.perform(get("/doctors/department/cardiology"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andReturn();
+        List<Employee> employees = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<List<Employee>>() {});
+        assertEquals(2, employees.size());
     }
 
+    @DisplayName("Test to create new employee")
     @Test
-    void create() {
+    void create() throws Exception{
+
+        Employee employee5 = new Employee(123456, "Test", "Test Arudo", ON);
+        String payload = objectMapper.writeValueAsString(employee5);
+        MvcResult mvcResult = mockMvc.perform(post("/newDoctor")
+                            .content(payload)
+                            .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andReturn();
+        Employee employee = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), Employee.class);
+        assertEquals(employee5.getEmployeeId(), employee.getEmployeeId());
+        assertEquals(employee5.getName(), employee.getName());
+        assertEquals(employee5.getDepartment(), employee.getDepartment());
+        assertTrue(employeeRepository.findById(123456).isPresent());
+
     }
 
+    @DisplayName("Test Update with PUT Status value")
     @Test
-    void updateStatus() {
+    void updateStatus() throws Exception {
+
+        Employee updatedEmployee = new Employee(564134, "immunology", "Sam Ortega", OFF);
+        String payload = objectMapper.writeValueAsString(updatedEmployee);
+
+        MvcResult mvcResult = mockMvc.perform(put("/updateDoctorStatus/564134")
+                        .content(payload)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andReturn();
+        Employee employee = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), Employee.class);
+        assertEquals(updatedEmployee.getEmployeeId(), employee.getEmployeeId());
+        assertEquals(updatedEmployee.getName(), employee.getName());
+        assertEquals(updatedEmployee.getStatus(), employee.getStatus());
+
     }
 
+    @DisplayName("Test update with PUT department value")
     @Test
-    void updateDepartment() {
+    void updateDepartment() throws Exception {
+
+        Employee updatedEmployee = new Employee(564134, "cardiology", "Sam Ortega", ON);
+        String payload = objectMapper.writeValueAsString(updatedEmployee);
+
+        MvcResult mvcResult = mockMvc.perform(put("/updateDoctorDepartment/564134")
+                        .content(payload)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andReturn();
+        Employee employee = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), Employee.class);
+        assertEquals(updatedEmployee.getEmployeeId(), employee.getEmployeeId());
+        assertEquals(updatedEmployee.getName(), employee.getName());
+        assertEquals(updatedEmployee.getStatus(), employee.getStatus());
+        assertEquals(updatedEmployee.getDepartment(), employee.getDepartment());
+
     }
 }

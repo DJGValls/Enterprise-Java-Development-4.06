@@ -1,6 +1,6 @@
 package EnterpriseJavaDevelopment42.Controller;
 
-import EnterpriseJavaDevelopment42.Model.Employee;
+import EnterpriseJavaDevelopment42.Model.DTO.PatientNameDTO;
 import EnterpriseJavaDevelopment42.Model.Patient;
 import EnterpriseJavaDevelopment42.Model.Status;
 import EnterpriseJavaDevelopment42.Service.PatientService;
@@ -51,15 +51,10 @@ public class PatientController {
         return patientService.save(patient);
     }
 
-    @PutMapping("/updatePatient/{patientsId}")
-    public Patient update(@PathVariable int patientId, @RequestBody Patient patient){
-        return patientService.update(patientId, patient);
+    @PatchMapping("/updatePatient/{id}")
+    public Patient updatePatientInfo(@PathVariable int id, @RequestBody PatientNameDTO name){
+        return patientService.updatePatientInfo(id, name);
     }
-
-
-
-
-
 
 
 
